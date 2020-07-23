@@ -1,0 +1,214 @@
+using System;
+using System.IO;
+using Microsoft.Office.Interop.Excel; // Библиотека для работы с Excel файлами
+using Excel = Microsoft.Office.Interop.Excel;
+namespace ConverterXLS
+{
+    class Program
+    {
+        public static int UTF { get; private set; }
+        static void Main(string[] args)
+        {
+            //Create COM Objects.
+            Application excelApp = new Application(); 
+            if (excelApp == null) // Проверка наличия Excel
+            {
+                Console.WriteLine("Excel не установлен");
+                return;
+            }
+            string NameFile;
+            string htmlName;
+            Console.WriteLine("((ФАЙЛ НЕОБХОДИМО КИНУТЬ В МЕСТО ХРАНЕНИЯ ПРОГРАММЫ. EXE ПЕРЕТАСКИВАТЬ ТОЛЬКО С ФАЙЛАМИ))");
+            Console.WriteLine("Впишите название файла без формата: ");
+            NameFile = Console.ReadLine();
+            while (!(File.Exists($"{NameFile}.xlsx"))) // Проверка наличия файла Excel
+            {
+                Console.WriteLine("Файл не найден! Впишите правильное название файла: ");
+                NameFile = Console.ReadLine();
+            }
+            Console.WriteLine("Назовите html файл без указания формата: ");
+            htmlName = Console.ReadLine();
+            if (!(File.Exists($"{htmlName}.html"))) // Проверка наличия html файла
+            {
+                Console.WriteLine($"Такого html нет. Создаем {htmlName}.html.........................");
+            }
+            else
+                Console.WriteLine($"Существует {htmlName}.html. Вписываем данные в {htmlName}.html.........................");
+            string fullPath = Path.GetFullPath($"{NameFile}.xlsx");
+            fullPath = fullPath.Replace("\\", "\\\\");
+            Workbook excelBook = excelApp.Workbooks.Open($"{fullPath}"); // Открытие Excel файла
+            _Worksheet excelSheet = excelBook.Sheets[1];
+            Excel.Range excelRange = excelSheet.UsedRange;
+
+            int rows = excelRange.Rows.Count; // Переменная для строки
+            int cols = excelRange.Columns.Count; // Переменная для столбца
+            string text = "<!doctype html>" + "\n" + 
+                "<html>" + "\n" +
+                "<head>" + "\n" +
+                "<meta charset=\"UTF-8\">" + "\n" +
+                "<title>Руководство. Педагогический (научно-педагогический) состав</title>" + "\n" +
+                "<link rel=\"stylesheet\" href=\"/button-visually-impaired/css/style.css\" type=\"text/css\">" + "\n" +
+                "<link rel=\"stylesheet\" href=\"/button-visually-impaired/css/bvi.min.css\" type=\"text/css\">" + "\n" +
+                "</head>" + "\n" +
+                "<body>" + "\n" +
+                "<div class=\"bvi-hide\" itemprop=\"copy\"><a class=\"nav-item nav-link bvi-panel-open-menu\" href=\"#\"><img src=\"/button-visually-impaired/img/eye.png\" alt=\"сайт для слабовидящих\" style=\"float:right; width:250px;\" ></a></div>" + "\n" +
+                "<h2 style=\"text-align:center\">Филиал \"Котельники\" государственного университета \"Дубна\"</h2>" + "\n" +
+                "<h3 style=\"text-align:center\">Руководство. Педагогический (научно-педагогический) состав</h3>" + "\n" +
+                "<h4>Администрация образовательной организации</h4>" + "\n" +
+                "<table itemprop=\"rucovodstvo\" border=\"1\" cellspacing=\"0\" cellpadding=\"4\">" + "\n" +
+                "\t<tbody style=\"text-align:center; vertical-align:middle;\">" + "\n" +
+                "\t<tr>" + "\n" +
+                "\t\t<td style=\"width: 4ex; \">№<br>п/п</td>" + "\n" +
+                "\t\t<td>Фамилия, имя и отчество</td>" + "\n" +
+                "\t\t<td>Должность</td>" + "\n" +
+                "\t\t<td>Контактный телефон</td>" + "\n" +
+                "\t\t<td>Электронная почта</td>" + "\n" +
+                "\t</tr>" + "\n" +
+                "\t<tr>" + "\n" +
+                "\t\t<td>1</td>" + "\n" +
+                "\t\t<td itemprop=\"fio\" style=\"text-align:left;\">Золотарева Альбина Фаниловна</td>" + "\n" +
+                "\t\t<td itemprop=\"post\" style=\"text-align:left;\">Директор</td>" + "\n" +
+                "\t\t<td itemprop=\"telephone\">+7(495) 551-11-15</td>" + "\n" +
+                "\t\t<td itemprop=\"email\">uni_fkt@mail.ru</td>" + "\n" +
+                "\t</tr>" + "\n" +
+                "\t<tr>" + "\n" +
+                "\t\t<td>2</td>" + "\n" +
+                "\t\t<td itemprop=\"fio\" style=\"text-align:left;\">Орлова Елена Юрьевна</td>" + "\n" +
+                "\t\t<td itemprop=\"post\" style=\"text-align:left;\">Зам. директора по учебно-методической работе</td>" + "\n" +
+                "\t\t<td itemprop=\"telephone\">+7(495) 551-11-15</td>" + "\n" +
+                "\t\t<td itemprop=\"email\">uni_fkt@mail.ru</td>" + "\n" +
+                "\t</tr>" + "\n" +
+                "\t<tr>" + "\n" +
+                "\t\t<td>3</td>" + "\n" +
+                "\t\t<td itemprop=\"fio\" style=\"text-align:left;\">Калмыкова Елена Ивановна</td>" + "\n" +
+                "\t\t<td itemprop=\"post\" style=\"text-align:left;\">Зам. директора по воспитательной работе и профориентационной деятельности</td>" + "\n" +
+                "\t\t<td itemprop=\"telephone\">+7(495) 551-11-15</td>" + "\n" +
+                "\t\t<td itemprop=\"email\">uni_fkt@mail.ru</td>" + "\n" +
+                "\t</tr>" + "\n" +
+                "\t<tr>" + "\n" +
+                "\t\t<td>4</td>" + "\n" +
+                "\t\t<td itemprop=\"fio\" style=\"text-align:left; \">Груздев Александр Ардольевич</td>" + "\n" +
+                "\t\t<td itemprop=\"post\" style=\"text-align:left; \">Зам. директора по безопасности</td>" + "\n" +
+                "\t\t<td itemprop=\"telephone\">+7(495) 551-11-15</td>" + "\n" +
+                "\t<td itemprop=\"email\">uni_fkt@mail.ru</td>" + "\n" +
+                "\t</tr>" + "\n" +
+                "\t</tbody>" + "\n" +
+                "</table>" + "\n" +
+                "<div itemprop=\"rucovodstvoFil\">" + "\n" +
+                "\t<p itemprop=\"nameFil\">У образовательной организации нет филиалов</p>" + "\n" +
+                "\t<p itemprop=\"fio\" style=\"display:none;\">У образовательной организации нет филиалов</p>" + "\n" +
+                "\t<p itemprop=\"post\" style=\"display:none;\">У образовательной организации нет филиалов</p>" + "\n" +
+                "\t<p itemprop=\"telephone\" style=\"display:none;\">У образовательной организации нет филиалов</p>" + "\n" +
+                "\t<p itemprop=\"email\" style=\"display:none;\">У образовательной организации нет филиалов</p>" + "\n" +
+                "</div>" + "\n" +
+                "<div itemprop=\"teachingStaff\">" + "\n" +
+                "<h4>Cостав научно-педагогических работников образовательной организации (ВО)</h4>" + "\n" +
+                "<table style=\"border-collapse: collapse; border: solid 1px;\">" + "\n" +
+                "\t<tbody style=\"text-align:center; vertical-align:middle;\">	" + "\n" +
+                "\t<tr>" + "\n" +
+                "\t\t<td style=\"width: 4ex;\">№<br>п/п</td>" + "\n" +
+                "\t\t<td>Фамилия, имя и отчество</td>" + "\n" +
+                "\t\t<td>Должность</td>" + "\n" +
+                "\t\t<td>Преподаваемые дисциплины</td>" + "\n" +
+                "\t\t<td>Уровень образования</td>" + "\n" +
+                "\t\t<td>Квалификация</td>" + "\n" +
+                "\t\t<td>Ученая степень (при наличии)</td>" + "\n" +
+                "\t\t<td>Ученое звание (при наличии)</td>" + "\n" +
+                "\t\t<td>Направление подготовки и (или) специальности</td>" + "\n" +
+                "\t\t<td style=\"width:30%;\">Повышение квалификации и (или) профессиональная переподготовка (при наличии)</td>" + "\n" +
+                "\t\t<td>Общий стаж работы</td>" + "\n" +
+                "\t\t<td>Стаж педагогической работы по специальности</td>" + "\n" +
+                "\t</tr>" + "\n" +
+                "\t</tbody>" + "\n" +
+                "\t<tbody style=\"text-align:left; vertical-align:top;\">" + "\n";
+            string prop="";
+            int txtcenter=1;
+            var newText = new StreamWriter($"{htmlName}.html", true); // Создается html для записи
+            newText.Write(text); // Записать текст с переменной string
+            for (int i = 3; i <= rows; i++) // Цикл для записи в html
+            {
+                newText.Write("\t<tr>\n\t\t<td style = \"text-align:center;\">"+txtcenter+"</td>");
+                for (int j = 1; j <= 11; j++) // Цикл для записи в html с проверкой для тегов itemprop
+                {
+                    switch (j)
+                    {
+                        case 1:
+                            prop = "<td itemprop=\"fio\">";
+                            break;
+                        case 2:
+                            prop = "<td itemprop=\"post\">";
+                            break;
+                        case 3:
+                            prop = "<td itemprop=\"teachingDiscipline\">";
+                            break;
+                        case 4:
+                            prop = "<td itemprop=\"teachingLevel\">";
+                            break;
+                        case 5:
+                            prop = "<td itemprop=\"teachingQual\">";
+                            break;
+                        case 6:
+                            prop = "<td itemprop=\"degree\">";
+                            break;
+                        case 7:
+                            prop = "<td itemprop=\"academStat\">";
+                            break;
+                        case 8:
+                            prop = "<td itemprop=\"employeeQualification\">";
+                            break;
+                        case 9:
+                            prop = "<td itemprop=\"profDevelopment\">";
+                            break;
+                        case 10:
+                            prop = "<td style=\"text-align:center; \"itemprop=\"genExperience\">";
+                            break;
+                        case 11:
+                            prop = "<td style=\"text-align:center; \"itemprop=\"specExperience\">";
+                            break;
+                    }
+                    if (excelRange.Cells[i, j] != null && excelRange.Cells.Value2[i, j] != null)
+                    {
+                        newText.Write(prop + excelRange.Cells.Value2[i, j] + "</td>\n"); // Запись в html из ячеек Excel
+                    }
+                }
+                txtcenter++;
+                newText.Write("\t</tr>\n");
+            }
+            newText.Write("</table>"); // Запись третьей таблицы вручную
+            text = "<h4>Актуальные вакансии в филиале \"Котельники\" государственного университета \"Дубна\"</h4>" + "\n" +
+                "<table style=\"border-collapse:collapse; border:solid 1px;\">" + "\n" +
+                "\t<tbody style=\"text-align:center; vertical-align:middle;\">" + "\n" +
+                "\t<tr>" + "\n" +
+                "\t\t<td style=\"width: 4ex;\">№<br>п/п</td>" + "\n" +
+                "\t\t<td>Наименование вакантной должности</td>" + "\n" +
+                "\t\t<td>Профиль деятельности</td>" + "\n" +
+                "\t\t<td>Дата, с которой образовалась вакансия</td>" + "\n" +
+                "\t\t<td>Ключевые требования к замещению вакантной должности</td>" + "\n" +
+                "\t\t<td>Контактное лицо</td>" + "\n" +
+                "\t</tr>" + "\n" +
+                "\t<tr>" + "\n" +
+                "\t\t<td style=\"text-align:center;\">1</td>" + "\n" +
+                "\t\t<td>педагог - психолог</td>" + "\n" +
+                "\t\t<td>образование</td>" + "\n" +
+                "\t\t<td>22.07.2019</td>" + "\n" +
+                "\t\t<td>высшее или среднее профессиональное образование</td>" + "\n" +
+                "\t\t<td>Кореева Т.А. специалист по кадрам 8-495-551-11-15</td>" + "\n" +
+                "\t</tr>" + "\n" +
+                "\t<tr>" + "\n" +
+                "\t\t<td style=\"text-align:center;\">2</td>" + "\n" +
+                "\t\t<td>педагог - организатор</td>" + "\n" +
+                "\t\t<td>образование</td>" + "\n" +
+                "\t\t<td>30.06.2019</td>" + "\n" +
+                "\t\t<td>высшее или среднее профессиональное образование</td>" + "\n" +
+                "\t\t<td>Кореева Т.А. специалист по кадрам 8-495-551-11-15</td>" + "\n" +
+                "\t</tr>" + "\n" +
+                "\t</tbody>" + "\n" +
+                "</body>" + "\n" +
+                "</html>" + "\n";
+            newText.Write(text); // Запись третьей таблицы вручную
+            newText.Close();
+            excelApp.Quit();
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
+        }
+    }
+}
